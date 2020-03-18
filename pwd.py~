@@ -1,6 +1,0 @@
-pwrdfile = open('passwordfile.txt', 'w+')
-words = open('words.txt', 'r')
-
-test = words.readlines()
-
-print(test[0])
