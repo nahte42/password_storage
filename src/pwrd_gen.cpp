@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <time.h>
 //#include<curses.h>
 
 using namespace std;
@@ -12,11 +13,19 @@ using namespace std;
 
 string hash_pwd(string user, string pass);
 bool login();
-void create();
+void create(string un0);
 
 int main(){
 
-  bool logged = false;
+  string t = "test.txt";
+  fstream test;
+  test.open(t.c_str(), ios::in);
+  string nextuser;
+  while(test>>nextuser){
+    create(nextuser);
+  }
+  //NEED TO CREATE RANDOM USERS
+  /*  bool logged = false;
   string ui;
   while(!logged){
     cout<<"Select from the list:\n1) Login\n2) Create New User\n3) Exit\n";
@@ -36,7 +45,7 @@ int main(){
       cout<<"Please enter a number from 1 to 3\n";
     cout<<endl;
   }
-  cout<<"You have succesfully logged in\n";
+  cout<<"You have succesfully logged in\n";*/
   
   return 0;
 }
@@ -86,7 +95,7 @@ bool login(){
     }
     else{
       pasFile.seekp(pos);
-      pasFile.read(pwrd,lgth+1);
+      pasFile.read(pwrd,lgth);
       password = hash_pwd(username, password);
       for(int i = 0; i < lgth; i ++){
 	if(password[i] != pwrd[i]){
@@ -100,8 +109,9 @@ bool login(){
   return true;
 }
 
-void create(){
+void create(string un0){
   //Files
+  srand(time(0));
   bool taken = true;
   string check;
   string un = "users.txt";
@@ -110,11 +120,14 @@ void create(){
   string password;
   fstream usrFile;
   fstream pasFile;
-  usrFile.open(un.c_str(),ios::in|ios::out);
+  usrFile.open(un.c_str(),ios::app);
   pasFile.open(pn.c_str(),ios::in);
   if(usrFile.fail())
     cout<<1<<endl;
-
+  username = un0;
+  password = un0+un0;
+  password = hash_pwd(username, password);
+  /*
   while(taken){
     taken = false;
     cout << "Please Create A Username: ";
@@ -136,7 +149,7 @@ void create(){
   usrFile.open(un.c_str(),ios::app);
   taken = true;
   /*  usrFile << username;
-      usrFile<<" "<<40<<" "<<9<<endl;*/
+      usrFile<<" "<<40<<" "<<9<<endl;
 
   while(taken){
     taken = false;
@@ -146,7 +159,7 @@ void create(){
       taken = true;
       cout<<"That password is less than 8 characters\n";
     }
-  }
+  }*/
   password = (hash_pwd(username,password));
 
   
@@ -162,16 +175,21 @@ void create(){
   usrFile<<username<<" "<<pos<<" "<<lgth<<endl;
   pasFile.close();
   usrFile.close();
+  //cin.get();
   
 }
 
 string hash_pwd(string user, string pass){
+int val = 0;
+ for(int i = 0; i < user.length(); i++){
+	val+=int(user[i]);
+}
   for(int i = 0; i < pass.length(); i++){
-    int val = int(pass[i]);
+    //int val = int(pass[i]);
     val *= val;
     val++;
-    val+=val/2;
-    val = (val%95)+33;
+    val+= int(pass[i]/2);
+    val = (val%94)+33;
     pass[i] = char(val);
   }
   return pass;

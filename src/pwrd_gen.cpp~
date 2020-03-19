@@ -12,11 +12,19 @@ using namespace std;
 
 string hash_pwd(string user, string pass);
 bool login();
-void create();
+void create(string un0);
 
 int main(){
 
-  bool logged = false;
+  string t = "test.txt";
+  fstream test;
+  test.open(t.c_str(), ios::in);
+  string nextuser;
+  while(test>>nextuser){
+    create(nextuser);
+  }
+  //NEED TO CREATE RANDOM USERS
+  /*  bool logged = false;
   string ui;
   while(!logged){
     cout<<"Select from the list:\n1) Login\n2) Create New User\n3) Exit\n";
@@ -36,7 +44,7 @@ int main(){
       cout<<"Please enter a number from 1 to 3\n";
     cout<<endl;
   }
-  cout<<"You have succesfully logged in\n";
+  cout<<"You have succesfully logged in\n";*/
   
   return 0;
 }
@@ -86,7 +94,7 @@ bool login(){
     }
     else{
       pasFile.seekp(pos);
-      pasFile.read(pwrd,lgth+1);
+      pasFile.read(pwrd,lgth);
       password = hash_pwd(username, password);
       for(int i = 0; i < lgth; i ++){
 	if(password[i] != pwrd[i]){
@@ -100,7 +108,7 @@ bool login(){
   return true;
 }
 
-void create(){
+void create(string un0){
   //Files
   bool taken = true;
   string check;
@@ -114,7 +122,10 @@ void create(){
   pasFile.open(pn.c_str(),ios::in);
   if(usrFile.fail())
     cout<<1<<endl;
-
+  username = un0;
+  password = un0+un0;
+  password = hash_pwd(username, password);
+  /*
   while(taken){
     taken = false;
     cout << "Please Create A Username: ";
@@ -136,7 +147,7 @@ void create(){
   usrFile.open(un.c_str(),ios::app);
   taken = true;
   /*  usrFile << username;
-      usrFile<<" "<<40<<" "<<9<<endl;*/
+      usrFile<<" "<<40<<" "<<9<<endl;
 
   while(taken){
     taken = false;
@@ -146,7 +157,7 @@ void create(){
       taken = true;
       cout<<"That password is less than 8 characters\n";
     }
-  }
+  }*/
   password = (hash_pwd(username,password));
 
   
