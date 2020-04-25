@@ -141,7 +141,9 @@ void create(){
   while(taken){
     taken = false;
     cout<<"Please entert a password with 8 or more characters: ";
+    system("stty -echo");
     cin >> password;
+    system("stty echo");
     if(password.length() < 8){
       taken = true;
       cout<<"That password is less than 8 characters\n";
